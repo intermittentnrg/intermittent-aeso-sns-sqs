@@ -33,7 +33,7 @@ raise 'no files' if paths.empty?
 
 system "git", "add", "-v", *paths
 system "git", "commit", "-m", "Updated data from AWS SQS"
-system "git", "push"
+system "git", "push", exception: true
 
 i=0
 receipt_handles.each_slice(10) do |batch|
