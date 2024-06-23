@@ -14,8 +14,9 @@ loop do
     wait_time_seconds: 0 # Do not wait to check for the message.
   })
   receive_message_result.messages.each do |message|
+    receipt_handles << message.receipt_handle
     body = message.body
-    body =~ /Last Update : (.*?)"\r\n/
+    next unless body =~ /Last Update : (.*?)"\r\n/
     time = Time.strptime($1, "%B %d, %Y %H:%M")
     path = time.strftime("%Y-%m-%d/%H:%M.csv")
     dir = File.dirname(path)
@@ -24,7 +25,6 @@ loop do
     puts path
 
     paths << path
-    receipt_handles << message.receipt_handle
   end
   break if receive_message_result.messages.length <10
 end
